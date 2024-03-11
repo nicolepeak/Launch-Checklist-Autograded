@@ -1,6 +1,6 @@
 // Write your helper functions here!
 
-require("cross-fetch/polyfill");
+//require("cross-fetch/polyfill");
 
 function addDestinationInfo(
   document,
@@ -11,6 +11,18 @@ function addDestinationInfo(
   moons,
   imageUrl
 ) {
+  let missionTarget = document.getElementById("missionTarget");
+
+  missionTarget.innerHTML = `                 <h2>Mission Destination</h2>
+  <ol>
+      <li>Name: ${name} </li>
+      <li>Diameter:${diameter} </li>
+      <li>Star: ${star}</li>
+      <li>Distance from Earth: ${distance} </li>
+      <li>Number of Moons: ${moons} </li>
+  </ol>
+  <img src="${imageUrl}">`;
+
   // Here is the HTML formatting for our mission target div.
   /*
                  <h2>Mission Destination</h2>
@@ -50,58 +62,64 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoMass) {
     pilotValidation === "Not a Number" &&
     coPilotValidation === "Not a Number"
   ) {
-    console.log("testing");
-    document.getElementById("pilotStatus").textContent = `${pilot} is Ready`;
+    document.getElementById(
+      "pilotStatus"
+    ).textContent = `Pilot ${pilot} is ready for launch`;
     document.getElementById(
       "copilotStatus"
-    ).textContent = `${copilot} is Ready`;
+    ).textContent = `Co-pilot ${copilot} is ready for launch`;
+    document.getElementById("launchStatus").style.color = "green";
+    list.style.visibility = "visible";
+    document.getElementById("launchStatus").innerHTML =
+      "Shuttle is Ready for Launch";
   } else {
     alert("Enter valid input for pilots");
   }
   if (fuelValidation === "Is a Number" && fuelLevel < 10000) {
-    list.style.visibility = "visible";
     document.getElementById("fuelStatus").innerHTML =
-      "Not enough fuel for takeoff";
+      "Fuel level too low for launch";
     document.getElementById("launchStatus").innerHTML =
-      "Shuttle not ready for launch";
+      "Shuttle Not Ready for Launch";
     document.getElementById("launchStatus").style.color = "red";
-  } else if (fuelValidation === "Is a Number" && fuelLevel > 10000) {
-    list.style.visibility = "visible";
+  } else if (fuelValidation === "Is a Number" && fuelLevel >= 10000) {
     document.getElementById("fuelStatus").innerHTML =
-      "Fuel amount ready for takeoff";
-    document.getElementById("launchStatus").style.color = "green";
+      "Fuel level high enough for launch";
   } else if (fuelValidation !== "Is a Number") {
     alert("Enter valid input for fuel.");
   }
 
   if (cargoValidation === "Is a Number" && cargoMass > 10000) {
-    list.style.visibility = "visible";
     document.getElementById("cargoStatus").innerHTML =
-      "Too much mass for shuttle to take off";
+      "Cargo mass too heavy for launch";
     document.getElementById("launchStatus").innerHTML =
-      "Shuttle not ready for launch";
+      "Shuttle Not Ready for Launch";
     document.getElementById("launchStatus").style.color = "red";
-  } else if (cargoValidation === "Is a Number" && cargoMass < 10000) {
-    list.style.visibility = "visible";
+  } else if (cargoValidation === "Is a Number" && cargoMass <= 10000) {
     document.getElementById("cargoStatus").innerHTML =
-      "Mass amount ready for takeoff";
-    document.getElementById("launchStatus").innerHTML =
-      "Shuttle ready for launch";
-    document.getElementById("launchStatus").style.color = "green";
+      "Cargo mass low enough for launch";
   } else if (cargoValidation !== "Is a Number") {
     alert("Enter valid input for cargo.");
   }
 }
 
-// async function myFetch() {
-//   let planetsReturned;
+async function myFetch() {
+  let planetsReturned;
 
-//   planetsReturned = await fetch().then(function (response) {});
+  planetsReturned = await fetch(
+    "https://handlers.education.launchcode.org/static/planets.json"
+  ).then(function (response) {
+    // console.log(response);
+    return response.json();
+  });
 
-//   return planetsReturned;
-// }
+  return planetsReturned;
+}
 
-// function pickPlanet(planets) {}
+function pickPlanet(planets) {
+  const randomIndex = Math.floor(Math.random() * planets.length);
+  const randomPlanet = planets[randomIndex];
+  return randomPlanet;
+}
 
 module.exports.addDestinationInfo = addDestinationInfo;
 module.exports.validateInput = validateInput;
