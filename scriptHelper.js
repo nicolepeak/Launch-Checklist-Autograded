@@ -23,6 +23,7 @@ function addDestinationInfo(
   </ol>
   <img src="${imageUrl}">`;
 
+  
   // Here is the HTML formatting for our mission target div.
   /*
                  <h2>Mission Destination</h2>
